@@ -22,7 +22,7 @@ app.listen(3000, () => {
 
 // GET
 app.get("/getTodos", (req, res) => {
-    Todos.find()
+  Todos.find()
     .then(s => res.status(200).send(s))
     .catch(c => res.status(400).send());
 });
@@ -33,6 +33,15 @@ app.post("/postTodos", (req, res) => {
 
   item
     .save()
+    .then(s => res.status(200).send(s))
+    .catch(e => res.status(400).send(e));
+});
+
+// DELETE
+app.delete("/deleteTodos/:id", (req, res) => {
+  const id = req.params.id;
+
+  Todos.findByIdAndRemove(id)
     .then(s => res.status(200).send(s))
     .catch(e => res.status(400).send(e));
 });
