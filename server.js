@@ -1,4 +1,6 @@
 const express = require("express");
+
+const _ = require("lodash");
 const bodyParser = require("body-parser");
 
 const app = express();
@@ -44,4 +46,15 @@ app.delete("/deleteTodos/:id", (req, res) => {
   Todos.findByIdAndRemove(id)
     .then(s => res.status(200).send(s))
     .catch(e => res.status(400).send(e));
+});
+
+app.patch("/todos/:id", (req, res) => {
+  const id = req.params.id;
+  let body = _.pick(req.body, ["item"]);
+
+  Todos.findOneAndUpdate(id, { $set: body },{returnNewDocument: true})
+    .then(s => res.status(200).send())
+    .catch(e => res.status(400).send());
+
+  console.log(body);
 });
