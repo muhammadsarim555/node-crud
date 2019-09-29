@@ -9,6 +9,7 @@ const { mongoose } = require("./db/mongodb");
 const db = mongoose.connection;
 
 const { Todos } = require("./models/todoItems");
+const {User} = require("./models/user")
 
 db.once("open", () => {
   console.log("Database Connected Successfully");
@@ -58,3 +59,15 @@ app.patch("/todos/:id", (req, res) => {
 
   console.log(body);
 });
+
+
+// USERS
+app.post("/users", (req, res) => {
+  const body = _.pick(req.body, ["email", "password"])
+  const user = new User(body)
+
+  user.save().then(s => res.send(user))
+  .catch(e => res.status(400).send(e))
+
+})
+
